@@ -1,0 +1,24 @@
+# tome-pulse behind a reverse proxy. Put a rate limit on /v1/report at the
+# proxy or CDN; the app itself keeps no client addresses, so it cannot do it.
+services:
+  pulse:
+    image: ghcr.io/bndct-devops/tome-pulse:latest
+    container_name: tome-pulse
+    ports:
+      - "8750:8750"
+    volumes:
+      - ./data:/data
+    environment:
+      - PULSE_DB=/data/pulse.db
+      # - PULSE_NEW_PER_DAY=500        # new instances accepted per UTC day
+      # - PULSE_RETENTION_MONTHS=12    # raw monthly rows kept this long
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    mem_limit: 128m
+    cpus: 0.5
+    restart: unless-stopped
