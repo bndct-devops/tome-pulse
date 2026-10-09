@@ -66,7 +66,7 @@ Top to bottom: what runs, how big the install is, what is in it, how much it is 
 docker compose up -d
 ```
 
-The compose file runs the container read-only, unprivileged, with every capability dropped and a memory and CPU cap, and mounts `./data` for the database. Put a reverse proxy with TLS in front, and a rate limit on `/v1/report` at the proxy or CDN. The app keeps no client addresses, so it cannot rate-limit by itself.
+The compose file runs the container read-only, unprivileged, with every capability dropped and a memory and CPU cap. The database lives in the `pulse-data` named volume; back that up and you have everything. Put a reverse proxy with TLS in front, and a rate limit on `/v1/report` at the proxy or CDN. The app keeps no client addresses, so it cannot rate-limit by itself.
 
 Settings, all optional: `PULSE_DB` (default `/data/pulse.db`), `PULSE_NEW_PER_DAY` (new instances accepted per UTC day, default 500), `PULSE_RETENTION_MONTHS` (default 12), `PULSE_MAX_BODY` (bytes, default 8192).
 

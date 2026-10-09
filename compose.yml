@@ -7,7 +7,9 @@ services:
     ports:
       - "8750:8750"
     volumes:
-      - ./data:/data
+      # A named volume, not a bind mount: it inherits the image's ownership of
+      # /data, so the unprivileged user can write there with no chown on the host.
+      - pulse-data:/data
     environment:
       - PULSE_DB=/data/pulse.db
       # - PULSE_NEW_PER_DAY=500        # new instances accepted per UTC day
@@ -22,3 +24,6 @@ services:
     mem_limit: 128m
     cpus: 0.5
     restart: unless-stopped
+
+volumes:
+  pulse-data:
